@@ -49,7 +49,6 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'post'
         verbose_name_plural = 'posts'
-        ordering = ('-pub_date',)
 
     def __str__(self):
         return self.text
@@ -90,7 +89,7 @@ class Follow(models.Model):
         related_name='follower',
         verbose_name='Подписчик'
     )
-    author = models.ForeignKey(
+    following = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='following',
@@ -100,11 +99,11 @@ class Follow(models.Model):
     class Meta:
         constraints = (
             models.UniqueConstraint(
-                fields=('user', 'author'),
+                fields=('user', 'following'),
                 name='unique_follow'
             ),
             models.CheckConstraint(
-                check=~models.Q(user=models.F('author')),
-                name='user_not_equal_author'
+                check=~models.Q(user=models.F('following')),
+                name='user_not_equal_following'
             )
         )
