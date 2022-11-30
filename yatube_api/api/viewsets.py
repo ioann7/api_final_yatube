@@ -12,3 +12,15 @@ class CreateListViewSet(mixins.CreateModelMixin,
     `.serializer_class` attributes.
     """
     pass
+
+
+class ListRetrieveViewSet(mixins.ListModelMixin,
+                          mixins.RetrieveModelMixin,
+                          GenericViewSet):
+    """
+    A viewset that provides `list` and `retrieve` actions.
+
+    To use it, override the class and set the `.queryset` and
+    `.serializer_class` attributes.
+    """
+    pass

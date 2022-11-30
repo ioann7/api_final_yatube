@@ -4,7 +4,12 @@ from rest_framework import filters
 from posts.models import Comment, Post, Group, Follow
 from api.serializers import (CommentSerializer, PostSerializer,
                              GroupSerializer, FollowSerializer)
-from api.viewsets import CreateListViewSet
+from api.viewsets import CreateListViewSet, ListRetrieveViewSet
+
+
+class GroupViewSet(ListRetrieveViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
 
 
 class FollowViewSet(CreateListViewSet):
