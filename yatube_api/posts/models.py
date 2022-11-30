@@ -77,7 +77,7 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'comment'
         verbose_name_plural = 'comments'
-        ordering = ('created',)
+        ordering = ('-created',)
 
     def __str__(self) -> str:
         return self.text[:10]
