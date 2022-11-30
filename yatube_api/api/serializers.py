@@ -1,21 +1,9 @@
-import base64
-
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from rest_framework.validators import UniqueTogetherValidator
-from django.core.files.base import ContentFile
+from drf_extra_fields.fields import Base64ImageField
 
 from posts.models import Comment, Post, Group, Follow, User
-
-
-class Base64ImageField(serializers.ImageField):
-    def to_internal_value(self, data):
-        if isinstance(data, str) and data.startswith('data:image'):
-            format, image_string = data.split(';base64,')
-            ext_file = format.split('/')[-1]
-            file_name = 'image.' + ext_file
-            data = ContentFile(base64.b64decode(image_string), name=file_name)
-        return super().to_internal_value(data)
 
 
 class GroupSerializer(serializers.ModelSerializer):
