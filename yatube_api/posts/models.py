@@ -42,7 +42,7 @@ class Post(models.Model):
         'Картинка', upload_to='posts/', null=True, blank=True)
     group = models.ForeignKey(
         Group, on_delete=models.SET_NULL,
-        related_name="posts", verbose_name='Группа',
+        related_name='posts', verbose_name='Группа',
         blank=True, null=True
     )
 
@@ -51,7 +51,7 @@ class Post(models.Model):
         verbose_name_plural = 'posts'
 
     def __str__(self):
-        return self.text
+        return self.text[:15]
 
 
 class Comment(models.Model):
@@ -97,6 +97,8 @@ class Follow(models.Model):
     )
 
     class Meta:
+        verbose_name = 'follow'
+        verbose_name_plural = 'follows'
         constraints = (
             models.UniqueConstraint(
                 fields=('user', 'following'),
