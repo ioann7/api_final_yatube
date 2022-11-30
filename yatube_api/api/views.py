@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import filters
 
@@ -5,6 +6,33 @@ from posts.models import Comment, Post, Group, Follow
 from api.serializers import (CommentSerializer, PostSerializer,
                              GroupSerializer, FollowSerializer)
 from api.viewsets import CreateListViewSet, ListRetrieveViewSet
+from api.permissions import IsAuthorOrReadOnly
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = (IsAuthorOrReadOnly,)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthorOrReadOnly,)
+
+    def get_queryset(self):
+        post_id = self.kwargs.get('post_id')
+        post = get_object_or_404(Post, pk=post_id)
+        queryset = post.comments
+        return queryset
+
+    def perform_create(self, serializer):
+        post_id = self.kwargs.get('post_id')
+        post = get_object_or_404(Post, pk=post_id)
+        serializer.save(author=self.request.user, post=post)
 
 
 class GroupViewSet(ListRetrieveViewSet):
